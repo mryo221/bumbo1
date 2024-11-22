@@ -1,0 +1,99 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game for Makenna</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        #game-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 50px;
+        }
+        .letter {
+            font-size: 2rem;
+            width: 60px;
+            height: 60px;
+            margin: 10px;
+            background-color: #007bff;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        .letter.correct {
+            background-color: #28a745;
+        }
+        #message {
+            font-size: 1.5rem;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Click the Letters to Spell the Message</h1>
+    <div id="game-container"></div>
+    <p id="message"></p>
+
+    <script>
+        const message = "Daniel Loves You Makenna";
+        const letters = [...message.replace(/ /g, '')];
+        let currentIndex = 0;
+        const timeLimit = 20; // seconds
+
+        const gameContainer = document.getElementById('game-container');
+        const messageEl = document.getElementById('message');
+
+        function shuffleArray(array) {
+            return array.sort(() => Math.random() - 0.5);
+        }
+
+        function startGame() {
+            const shuffledLetters = shuffleArray([...letters]);
+            shuffledLetters.forEach(letter => {
+                const letterEl = document.createElement('div');
+                letterEl.classList.add('letter');
+                letterEl.textContent = letter;
+                letterEl.addEventListener('click', () => handleLetterClick(letter, letterEl));
+                gameContainer.appendChild(letterEl);
+            });
+
+            setTimeout(() => {
+                endGame(false);
+            }, timeLimit * 1000);
+        }
+
+        function handleLetterClick(letter, letterEl) {
+            if (letter === letters[currentIndex]) {
+                letterEl.classList.add('correct');
+                currentIndex++;
+                if (currentIndex === letters.length) {
+                    endGame(true);
+                }
+            } else {
+                endGame(false);
+            }
+        }
+
+        function endGame(won) {
+            gameContainer.innerHTML = '';
+            messageEl.textContent = won
+                ? "Congratulations! Daniel Loves You Makenna 💕"
+                : "Time's up! Try again!";
+        }
+
+        startGame();
+    </script>
+</body>
+</html>
